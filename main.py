@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
+from datetime import datetime as dt
 
 def get_driver():
   #Set options to make Browsing easier
@@ -15,7 +16,20 @@ def get_driver():
   driver = webdriver.Chrome(options=options)
   driver.get("http://automated.pythonanywhere.com/login/")
   return driver
-  
+
+#This function removes all text aceepts the temp value
+def clean_text(text):
+  """Extracts only the temperature from tex"""
+  output = float(text.split(": ")[1]) #this will create an erray and the temp number is the 2nd element
+  return output
+
+#This functions creates a text file that stores the temperatured captured at a specific date and time
+def write_file(text):
+  """Write input text into a text file"""
+  filename = f"{dt.now().strftime('%Y-%m-%d.%H-%M-%S')}.txt"
+  with open(filename, 'w') as file:
+    file.write(text)
+    
 def main():
   driver = get_driver()
   #Here I tell the script to find the user name field and enter the username
@@ -26,6 +40,9 @@ def main():
   time.sleep(1)
   #after logging in we click the home button
   driver.find_element(by="xpath", value="/html/body/nav/div/a").click()
-  print(driver.current_url)
+  time.sleep(1)
+  
+  text = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]").text      
+  write_file(text)
 
 print(main())
