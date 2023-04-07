@@ -40,9 +40,12 @@ def main():
   time.sleep(1)
   #after logging in we click the home button
   driver.find_element(by="xpath", value="/html/body/nav/div/a").click()
-  time.sleep(1)
+  time.sleep(2)
   
-  text = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]").text      
+  element = driver.find_element(by="xpath", value="/html/body/div[1]/div/h1[2]")
+  #time.sleep(1)
+  text = str(clean_text(element.text))
+  
   write_file(text)
 
 print(main())
